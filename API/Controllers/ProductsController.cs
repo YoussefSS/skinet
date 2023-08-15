@@ -32,5 +32,17 @@ namespace API.Controllers
         {
             return await _repo.GetProductByIdAsync(id); // takes in a primary key
         }
+
+        [HttpGet("brands")]
+        public async Task<ActionResult<IReadOnlyList<ProductBrand>>> GetProductBrands()
+        {
+            return Ok(await _repo.GetProductBrandsAsync()); // asp.net does not allow us to directly return an IReadOnlyList, so we must wrap it in Ok
+        }
+
+        [HttpGet("types")]
+        public async Task<ActionResult<IReadOnlyList<ProductType>>> GetProductTypes()
+        {
+            return Ok(await _repo.GetProductTypesAsync());
+        }
     }
 }

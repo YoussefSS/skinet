@@ -30,4 +30,22 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+// START SNIPPET
+// This code snippet is going to create migrations for us at application startup
+// Get access to a scoped service here in our Program.cs class where we do not have the ability to inject it
+using var scope = app.Services.CreateScope();
+var services = scope.ServiceProvider;
+var context = services.GetRequiredService<StoreContext>();
+var logger = services.GetRequiredService<ILogger<Program>>();
+
+try
+{
+    await context.Database.MigrateAsync(); // applies any pending migrations and will create the database if it does not already exist
+}
+catch (Exception ex)
+{
+    logger.LogError(ex, "An error occured during migration");
+}
+// END SNIPPET
+
 app.Run();

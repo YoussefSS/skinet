@@ -12,5 +12,7 @@ namespace Infrastructure.Data
 
         // Takes in a Product entity (check Entities > Product.cs) and 'Products' will be our table name
         public DbSet<Product> Products { get; set; }
+        public DbSet<ProductBrand> ProductBrands { get; set; }
+        public DbSet<ProductType> ProductTypes { get; set; }
     }
 }

@@ -14,7 +14,7 @@ namespace Infrastructure.Data
 
             if (spec.Criteria != null)
             {
-                query = query.Where(spec.Criteria);
+                query = query.Where(spec.Criteria); // a lambda expression, ex: p => p.ProductTypeId == 2
             }
 
             // This takes our multiple .Include() statements and aggregates them and pass them into our query

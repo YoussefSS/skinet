@@ -17,7 +17,9 @@ namespace API.Helpers
             // CreateMap looks at the names of properties inside Product, and is going to try to map them
             // to what's inside ProductToReturnDto. As long as the names match, then we don't need to add any
             // additional configuration
-            CreateMap<Product, ProductToReturnDto>();
+            CreateMap<Product, ProductToReturnDto>()
+                .ForMember(d => d.ProductBrand, o => o.MapFrom(s => s.ProductBrand.Name)) // Set the ProductBrand on the Dto to ProductBrand.Name on Product
+                .ForMember(d => d.ProductType, o => o.MapFrom(s => s.ProductType.Name));
         }
     }
 }

@@ -10,9 +10,10 @@ using AutoMapper;
 
 namespace API.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")] // route will be /api/products/
-    public class ProductsController : ControllerBase
+    //These 2 lines are no longer needed as they're added in BaseApiController
+    //ApiController]
+    //[Route("api/[controller]")] // route will be /api/products/
+    public class ProductsController : BaseApiController
     {
 
         private readonly IGenericRepository<Product> _productsRepo;

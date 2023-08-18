@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using API.Errors;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,7 +22,7 @@ namespace API.Controllers
             var thing = _context.Products.Find(42); // product with id 42 does not exist, so null is returned from .Find
             if (thing == null)
             {
-                return NotFound();
+                return NotFound(new ApiResponse(404));
             }
 
             return Ok();
@@ -40,7 +41,7 @@ namespace API.Controllers
         [HttpGet("badrequest")]
         public ActionResult GetBadRequest()
         {
-            return BadRequest(); // 400 bad request
+            return BadRequest(new ApiResponse(400)); // 400 bad request
         }
 
         // Pass in a string instead of an id to get a validation error (due to using the [ApiController])

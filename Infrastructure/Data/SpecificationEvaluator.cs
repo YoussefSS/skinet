@@ -17,6 +17,16 @@ namespace Infrastructure.Data
                 query = query.Where(spec.Criteria); // a lambda expression, ex: p => p.ProductTypeId == 2
             }
 
+            if (spec.OrderBy != null)
+            {
+                query = query.OrderBy(spec.OrderBy);
+            }
+
+            if (spec.OrderByDescending != null)
+            {
+                query = query.OrderByDescending(spec.OrderByDescending);
+            }
+
             // This takes our multiple .Include() statements and aggregates them and pass them into our query
             query = spec.Includes.Aggregate(query, (current, include) => current.Include(include));
 

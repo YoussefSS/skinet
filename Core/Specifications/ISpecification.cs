@@ -8,5 +8,7 @@ namespace Core.Specifications
         // Func takes in a type and what it is returning
         Expression<Func<T, bool>> Criteria { get; }
         List<Expression<Func<T, object>>> Includes { get; }
+        Expression<Func<T, object>> OrderBy { get; }
+        Expression<Func<T, object>> OrderByDescending { get; }
     }
 }

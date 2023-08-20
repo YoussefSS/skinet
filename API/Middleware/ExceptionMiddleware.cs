@@ -37,7 +37,7 @@ namespace API.Middleware
                     : new ApiException((int)HttpStatusCode.InternalServerError); // production
 
                 var options = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
-                var json = JsonSerializer.Serialize(response, options); // we are not in the context of a Controller, so this will not be auto formatter into the CamelCase Json convention, we need to use options
+                var json = JsonSerializer.Serialize(response, options); // we are not in the context of a Controller, so this will not be auto formatted into the camelCase Json convention, we need to use options
 
                 await context.Response.WriteAsync(json);
             }

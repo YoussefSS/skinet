@@ -27,6 +27,12 @@ namespace Infrastructure.Data
                 query = query.OrderByDescending(spec.OrderByDescending);
             }
 
+            // Order is important, we want to page after we're done filtering and sorting
+            if (spec.IsPagingEnabled)
+            {
+                query = query.Skip(spec.Skip).Take(spec.Take);
+            }
+
             // This takes our multiple .Include() statements and aggregates them and pass them into our query
             query = spec.Includes.Aggregate(query, (current, include) => current.Include(include));
 

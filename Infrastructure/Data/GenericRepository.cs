@@ -36,6 +36,11 @@ namespace Infrastructure.Data
             return await ApplySpecification(spec).ToListAsync();
         }
 
+        public async Task<int> CountAsync(ISpecification<T> spec)
+        {
+            return await ApplySpecification(spec).CountAsync();
+        }
+
         private IQueryable<T> ApplySpecification(ISpecification<T> spec)
         {
             // Note that .AsQueryable is not really needed here, as .Set<T> returns a DbSet<T> which already derives from IQueryable<T>

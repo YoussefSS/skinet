@@ -39,6 +39,17 @@ namespace API.Extensions
                 };
             });
 
+            services.AddCors(opt =>
+            {
+                opt.AddPolicy("CorsPolicy", policy =>
+                {
+                    policy
+                        .AllowAnyHeader()
+                        .AllowAnyMethod() // ex get, post, etc..
+                        .WithOrigins("https://localhost:4200"); // only allow this origin, since we will add our angular server to the same project, we can hardcode this
+                });
+            });
+
             return services;
         }
     }

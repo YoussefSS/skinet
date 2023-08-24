@@ -13,6 +13,8 @@ export class ShopService {
 
   getProducts() {
     // returns observable
-    return this.http.get<Pagination<Product[]>>(this.baseUrl + 'products');
+    return this.http.get<Pagination<Product[]>>(
+      this.baseUrl + 'products?pageSize=50'
+    );
   }
 }

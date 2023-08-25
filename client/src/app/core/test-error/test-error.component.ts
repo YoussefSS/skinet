@@ -9,6 +9,7 @@ import { environment } from 'src/environments/environment';
 })
 export class TestErrorComponent {
   baseUrl = environment.apiUrl;
+  validationErrors: string[] = [];
 
   constructor(private http: HttpClient) {}
 
@@ -35,9 +36,13 @@ export class TestErrorComponent {
   }
 
   get400ValidationError() {
-    this.http.get(this.baseUrl + 'products/fourtytwo').subscribe({ // fourtytwo is not a number
+    this.http.get(this.baseUrl + 'products/fourtytwo').subscribe({
+      // fourtytwo is not a number
       next: (response) => console.log(response),
-      error: (error) => console.log(error),
+      error: (error) => {
+        console.log(error);
+        this.validationErrors = error.errors;
+      },
     });
   }
 }

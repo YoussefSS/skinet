@@ -12,8 +12,13 @@ const routes: Routes = [
   { path: 'server-error', component: ServerErrorComponent },
   {
     path: 'shop',
-    loadChildren: () => import('./shop/shop.module').then((m) => m.ShopModule),
-  }, // this route will be lazily loaded when we go to the '/shop' path
+    loadChildren: () => import('./shop/shop.module').then((m) => m.ShopModule), // this route will be lazily loaded when we go to the '/shop' path
+  },
+  {
+    path: 'basket',
+    loadChildren: () =>
+      import('./basket/basket.module').then((m) => m.BasketModule), // this route will be lazily loaded when we go to the '/shop' path
+  },
   { path: '**', redirectTo: '', pathMatch: 'full' }, // a route that does not exist
 ];
 

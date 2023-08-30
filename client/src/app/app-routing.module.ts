@@ -17,7 +17,12 @@ const routes: Routes = [
   {
     path: 'basket',
     loadChildren: () =>
-      import('./basket/basket.module').then((m) => m.BasketModule), // this route will be lazily loaded when we go to the '/shop' path
+      import('./basket/basket.module').then((m) => m.BasketModule),
+  },
+  {
+    path: 'checkout',
+    loadChildren: () =>
+      import('./checkout/checkout.module').then((m) => m.CheckoutModule),
   },
   { path: '**', redirectTo: '', pathMatch: 'full' }, // a route that does not exist
 ];

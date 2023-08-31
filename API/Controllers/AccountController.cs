@@ -37,5 +37,28 @@ namespace API.Controllers
                 DisplayName = user.DisplayName
             };
         }
+
+        [HttpPost("register")]
+        public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
+        {
+            var user = new AppUser
+            {
+                DisplayName = registerDto.DisplayName,
+                Email = registerDto.Email,
+                UserName = registerDto.Email // required for identity
+            };
+
+            // Returns an IdentityResult
+            var result = await _userManager.CreateAsync(user, registerDto.Password);
+
+            if (!result.Succeeded) return BadRequest(new ApiResponse(400)); // Should probably tell the user what they did wrong (ex weak password), we'll do this later in the course
+
+            return new UserDto
+            {
+                DisplayName = user.DisplayName,
+                Token = "This will be a token",
+                Email = user.Email
+            };
+        }
     }
 }

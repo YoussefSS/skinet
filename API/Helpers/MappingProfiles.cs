@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using API.Dtos;
 using AutoMapper;
 using Core.Entities;
+using Core.Entities.Identity;
 
 namespace API.Helpers
 {
@@ -21,6 +22,10 @@ namespace API.Helpers
                 .ForMember(d => d.ProductBrand, o => o.MapFrom(s => s.ProductBrand.Name)) // Set the ProductBrand on the Dto to ProductBrand.Name on Product
                 .ForMember(d => d.ProductType, o => o.MapFrom(s => s.ProductType.Name))
                 .ForMember(d => d.PictureUrl, o => o.MapFrom<ProductUrlResolver>());
+
+            // no need to do anything extra as the property names are the exact same
+            // Reverse map also maps AddressDto to Address
+            CreateMap<Address, AddressDto>().ReverseMap();
         }
     }
 }

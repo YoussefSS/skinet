@@ -26,6 +26,9 @@ namespace API.Helpers
             // no need to do anything extra as the property names are the exact same
             // Reverse map also maps AddressDto to Address
             CreateMap<Address, AddressDto>().ReverseMap();
+
+            CreateMap<CustomerBasketDto, CustomerBasket>();
+            CreateMap<BasketItemDto, BasketItem>();
         }
     }
 }

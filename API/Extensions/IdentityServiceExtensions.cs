@@ -33,7 +33,8 @@ namespace API.Extensions
                         ValidateIssuerSigningKey = true, // If false then any JWT will be accepted, true means only one signed by our server can be accepted
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Token:Key"])), // The same we used inside our TokenService
                         ValidIssuer = config["Token:Issuer"],
-                        ValidateIssuer = true // Makes sure the token contains the issuer from our server
+                        ValidateIssuer = true, // Makes sure the token contains the issuer from our server
+                        ValidateAudience = false
                     };
                 });
 

@@ -1,7 +1,10 @@
+using System.Text;
 using Core.Entities.Identity;
 using Infrastructure.Identity;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace API.Extensions
 {
@@ -22,7 +25,19 @@ namespace API.Extensions
             .AddSignInManager<SignInManager<AppUser>>(); // we'll use this for signing in
 
             // Authentication always comes before authorization as we can't authorize someone to do something without authenticating them
-            services.AddAuthentication();
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options => // Options here are saying what do we want to do to validate this token
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true, // If false then any JWT will be accepted, true means only one signed by our server can be accepted
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Token:Key"])), // The same we used inside our TokenService
+                        ValidIssuer = config["Token:Issuer"],
+                        ValidateIssuer = true // Makes sure the token contains the issuer from our server
+                    };
+                });
+
+
             services.AddAuthorization();
 
             return services;

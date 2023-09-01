@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using API.Dtos;
 using API.Errors;
+using API.Extensions;
 using Core.Entities.Identity;
 using Core.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -26,11 +27,8 @@ namespace API.Controllers
         [HttpGet]
         public async Task<ActionResult<UserDto>> GetCurrentUser()
         {
-            // To access the user you must be using the [Authorize] attribute otherwise it won't be available
-            var email = User?.FindFirstValue(ClaimTypes.Email); // User is in ControllerBase
-            // Or older way: var email = HttpContext.User?.Claims?.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value;
-
-            var user = await _userManager.FindByEmailAsync(email);
+            // To access the User you must be using the [Authorize] attribute otherwise it won't be available
+            var user = await _userManager.FindByEmailFromClaimsPrincipal(User);
 
             return new UserDto
             {
@@ -51,9 +49,7 @@ namespace API.Controllers
         [HttpGet("address")]
         public async Task<ActionResult<Address>> GetUserAddress()
         {
-            var email = User?.FindFirstValue(ClaimTypes.Email);
-
-            var user = await _userManager.FindByEmailAsync(email);
+            var user = await _userManager.FindUserByClaimsPrincipleWithAddress(User);
 
             return user.Address;
         }

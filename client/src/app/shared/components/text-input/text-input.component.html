@@ -1,1 +1,15 @@
-<p>text-input works!</p>
+<div class="form-floating mb-3">
+    <input 
+        type={{type}} 
+        [formControl]="control" 
+        placeholder="{{label}}"  
+        class="form-control" 
+        [ngClass]="(control.touched) ? control.invalid ? 'is-invalid' : 'is-valid' : null" 
+    > <!-- ngClass allows us to apply an additional class depending on whether the control is valid or not -->
+
+    <label for="floatingInput">{{label}}</label>
+    <div *ngIf="control.errors?.['required']" class="invalid-feedback">Please enter your {{label}}</div>
+    <div *ngIf="control.errors?.['email']" class="invalid-feedback">Invalid email address</div>
+    <!-- add any more validators here -->
+    
+</div>

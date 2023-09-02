@@ -10,7 +10,12 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { TextInputComponent } from './components/text-input/text-input.component';
 
 @NgModule({
-  declarations: [PagingHeaderComponent, PagerComponent, OrderTotalsComponent, TextInputComponent],
+  declarations: [
+    PagingHeaderComponent,
+    PagerComponent,
+    OrderTotalsComponent,
+    TextInputComponent,
+  ],
   imports: [
     CommonModule,
     PaginationModule.forRoot(), // forRoot so it's loaded as a singleton and the same module is used throughout the app
@@ -26,6 +31,7 @@ import { TextInputComponent } from './components/text-input/text-input.component
     OrderTotalsComponent,
     ReactiveFormsModule,
     BsDropdownModule,
+    TextInputComponent,
   ],
 })
 export class SharedModule {}

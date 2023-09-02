@@ -12,10 +12,13 @@ import { BusyService } from '../services/busy.service';
 export class LoadingInterceptor implements HttpInterceptor {
   constructor(private busyService: BusyService) {}
 
-  intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
+  intercept(
+    request: HttpRequest<unknown>,
+    next: HttpHandler
+  ): Observable<HttpEvent<unknown>> {
     this.busyService.busy();
     return next.handle(request).pipe(
-      delay(1000),
+      delay(200),
       finalize(() => this.busyService.idle()) // finalize is when a request has completed
     );
   }

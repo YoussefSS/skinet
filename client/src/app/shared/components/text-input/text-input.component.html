@@ -11,6 +11,7 @@
     <div *ngIf="control.errors?.['required']" class="invalid-feedback">Please enter your {{label}}</div>
     <div *ngIf="control.errors?.['email']" class="invalid-feedback">Invalid email address</div>
     <div *ngIf="control.errors?.['pattern']" class="invalid-feedback">Password needs to have 1 uppercase, 1 lowercase, 1 digit, 1 special character, and a minimum of 6 characters</div>
+    <div *ngIf="control.errors?.['emailExists']" class="invalid-feedback">Email address is taken</div>
     <!-- add any more validators here -->
     
 </div>

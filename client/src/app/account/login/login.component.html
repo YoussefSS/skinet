@@ -6,8 +6,9 @@
             </div>
 
             <div class="form-floating mb-3">
-                    <input type="email" formControlName="email" class="form-control" id="floatingInput" placeholder="Email">
+                    <input type="email" formControlName="email" class="form-control is-invalid" id="floatingInput" placeholder="Email">
                     <label for="floatingInput">Email address</label>
+                    <div class="invalid-feedback">Please choose a username</div>
                 </div>
                 <div class="form-floating">
                     <input type="password" formControlName="password" class="form-control" id="floatingPassword" placeholder="Password">
@@ -18,5 +19,12 @@
                 <button class="btn btn-lg btn-primary mt-3" type="submit">Sign in</button>
             </div>
         </form>
+    </div>
+    <div class="col-4 ms-5">
+        <p>Form Status: {{loginForm.status}}</p>
+        <p>Email Status: {{loginForm.get('email')?.status}}</p>
+        <p>Email touched: {{loginForm.get('email')?.touched}}</p>
+        <p>Email dirty: {{loginForm.get('email')?.dirty}}</p> <!-- Dirty means it's been changed from its initial value -->
+        <pre>{{loginForm.value | json}}</pre>
     </div>
 </div>

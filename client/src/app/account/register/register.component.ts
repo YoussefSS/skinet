@@ -7,7 +7,7 @@ import {
 } from '@angular/forms';
 import { AccountService } from '../account.service';
 import { Router } from '@angular/router';
-import { finalize, map } from 'rxjs';
+import { debounceTime, finalize, map, switchMap, take } from 'rxjs';
 
 @Component({
   selector: 'app-register',
@@ -49,9 +49,16 @@ export class RegisterComponent {
 
   validateEmailNotTaken(): AsyncValidatorFn {
     return (control: AbstractControl) => {
-      return this.accountService.checkEmailExists(control.value).pipe(
-        map((result) => (result ? { emailExists: true } : null)),
-        finalize(() => control.markAsTouched()) // This way we'll be notified immediately that the email is taken
+      return control.valueChanges.pipe(
+        debounceTime(1000), // wait a second after the user typed a character before calling the API
+        take(1), // only take the last value
+        switchMap(() => {
+          // switchMap returns an observable from the function we provide here which can then be used in our registerForm validator above
+          return this.accountService.checkEmailExists(control.value).pipe(
+            map((result) => (result ? { emailExists: true } : null)),
+            finalize(() => control.markAsTouched()) // This way we'll be notified immediately that the email is taken
+          );
+        })
       );
     };
   }

@@ -27,6 +27,6 @@ export class AppComponent implements OnInit {
 
   loadCurrentUser() {
     const token = localStorage.getItem('token');
-    if (token) this.accountService.loadCurrentUser(token).subscribe(); // just calling subscribe so the http request gets executed
+    this.accountService.loadCurrentUser(token).subscribe(); // just calling subscribe so the http request gets executed
   }
 }

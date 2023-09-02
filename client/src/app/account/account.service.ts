@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, map } from 'rxjs';
+import { ReplaySubject, map, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { User } from '../shared/models/user';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -13,12 +13,17 @@ import { Router } from '@angular/router';
 })
 export class AccountService {
   baseUrl = environment.apiUrl;
-  private currentUserSource = new BehaviorSubject<User | null>(null);
+  private currentUserSource = new ReplaySubject<User | null>(1);
   currentUser$ = this.currentUserSource.asObservable();
 
   constructor(private http: HttpClient, private router: Router) {}
 
-  loadCurrentUser(token: string) {
+  loadCurrentUser(token: string | null) {
+    if (token === null) {
+      this.currentUserSource.next(null); // We are ensuring there's always something in our replay subject
+      return of(null); // returns the same type of this method but with the value we passed in. In this case an observable of null
+    }
+
     // We'll send the token to our API so that we can authenticate them
     let headers = new HttpHeaders();
     headers = headers.set('Authorization', `Bearer ${token}`);
@@ -26,8 +31,13 @@ export class AccountService {
     return this.http.get<User>(this.baseUrl + 'account', { headers }).pipe(
       // We'll update the currentUser observable and set the token
       map((user) => {
-        localStorage.setItem('token', user.token); // store the token in local storage so that it persists
-        this.currentUserSource.next(user); // store the user object inside the observable
+        if (user) {
+          localStorage.setItem('token', user.token); // store the token in local storage so that it persists
+          this.currentUserSource.next(user); // store the user object inside the observable
+          return user;
+        } else {
+          return null;
+        }
       })
     );
   }

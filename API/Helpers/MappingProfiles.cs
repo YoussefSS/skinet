@@ -29,6 +29,9 @@ namespace API.Helpers
 
             CreateMap<CustomerBasketDto, CustomerBasket>();
             CreateMap<BasketItemDto, BasketItem>();
+
+            // Address in our order aggregate, using full namespace so it doesn't conflict with the other 'Address' from identity
+            CreateMap<AddressDto, Core.Entities.OrderAggregate.Address>();
         }
     }
 }

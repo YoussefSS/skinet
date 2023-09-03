@@ -15,6 +15,8 @@ namespace Infrastructure.Data.Config
                 // We'll rely on our AddressDto to handle our valdiation, but we should probably do so as well here
             });
 
+            builder.Navigation(a => a.ShipToAddress).IsRequired();
+
             // We want to turn our enum into a string rather than the default enum behavior
             builder.Property(s => s.Status)
                 .HasConversion(

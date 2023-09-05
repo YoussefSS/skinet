@@ -46,5 +46,24 @@ namespace Infrastructure.Data
             // Note that .AsQueryable is not really needed here, as .Set<T> returns a DbSet<T> which already derives from IQueryable<T>
             return SpecificationEvaluator<T>.GetQuery(_context.Set<T>().AsQueryable(), spec);
         }
+
+        public void Add(T entity)
+        {
+            // DbSet.Add tracks an adding change
+            _context.Set<T>().Add(entity);
+        }
+
+        public void Update(T entity)
+        {
+            // Marking the entity as modified to be changed when .SaveChangesAsync is called
+            _context.Set<T>().Attach(entity);
+            _context.Entry(entity).State = EntityState.Modified;
+        }
+
+        public void Delete(T entity)
+        {
+            // Track the remove
+            _context.Set<T>().Remove(entity);
+        }
     }
 }

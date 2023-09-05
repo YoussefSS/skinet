@@ -17,6 +17,7 @@ namespace Infrastructure.Data
 
         public async Task<int> Complete()
         {
+            // Either all the tracked operations will succeed or all will fail
             return await _context.SaveChangesAsync();
         }
 

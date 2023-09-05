@@ -37,6 +37,7 @@ import { CdkStepperModule } from '@angular/cdk/stepper';
     BsDropdownModule,
     TextInputComponent,
     StepperComponent,
+    CdkStepperModule,
   ],
 })
 export class SharedModule {}

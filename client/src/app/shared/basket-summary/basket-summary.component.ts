@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { BasketItem } from '../models/basket';
 import { BasketService } from 'src/app/basket/basket.service';
 
@@ -10,6 +10,7 @@ import { BasketService } from 'src/app/basket/basket.service';
 export class BasketSummaryComponent {
   @Output() addItem = new EventEmitter<BasketItem>();
   @Output() removeItem = new EventEmitter<{ id: number; quantity: number }>(); // we can only emit 1 thing so we put multiple things in 1 object
+  @Input() isBasket = true; // We'll show less items if we're not a basket (ie checkout)
 
   constructor(public basketService: BasketService) {}
 

@@ -44,6 +44,7 @@ namespace Infrastructure.Services
             var result = await _unitOfWork.Complete();
 
             // Meaning there have been 0 changes, so something went wrong, we'll let our order controller deal with the error response
+            // This will usually be 2 as apart from the Order, an OrderItem will also be added
             if (result <= 0)
             {
                 return null;

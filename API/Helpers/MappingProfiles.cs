@@ -6,6 +6,7 @@ using API.Dtos;
 using AutoMapper;
 using Core.Entities;
 using Core.Entities.Identity;
+using Core.Entities.OrderAggregate;
 
 namespace API.Helpers
 {
@@ -25,13 +26,16 @@ namespace API.Helpers
 
             // no need to do anything extra as the property names are the exact same
             // Reverse map also maps AddressDto to Address
-            CreateMap<Address, AddressDto>().ReverseMap();
+            CreateMap<Core.Entities.Identity.Address, AddressDto>().ReverseMap();
 
             CreateMap<CustomerBasketDto, CustomerBasket>();
             CreateMap<BasketItemDto, BasketItem>();
 
             // Address in our order aggregate, using full namespace so it doesn't conflict with the other 'Address' from identity
             CreateMap<AddressDto, Core.Entities.OrderAggregate.Address>();
+
+            CreateMap<Order, OrderToReturnDto>();
+            CreateMap<OrderItem, OrderItemDto>();
         }
     }
 }

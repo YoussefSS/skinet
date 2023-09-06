@@ -1,6 +1,7 @@
 <div class="container mt-5">
     <div *ngIf="(basketService.basketSource$ | async) === null">
         <p>There are no items in your basket</p>
+        <button class="btn btn-outline-success" routerLink="/shop">Return to Shop</button>
     </div>
 
     <ng-container *ngIf="(basketService.basketSource$ | async) as basket">

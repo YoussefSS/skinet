@@ -38,23 +38,35 @@ namespace Infrastructure.Services
             // calculate subtotal
             var subtotal = items.Sum(item => item.Price * item.Quantity);
 
-            // create order
-            var order = new Order(items, buyerEmail, shippingAddress, deliveryMethod, subtotal);
+            // check to see if order exists (possibly due to a payment failure)
+            var spec = new OrderByPaymentIntentIdSpecification(basket.PaymentIntentId);
+            var order = await _unitOfWork.Repository<Order>().GetEntityWithSpec(spec);
+
+            if (order != null)
+            {
+                order.ShipToAddress = shippingAddress;
+                order.DeliveryMethod = deliveryMethod;
+                order.Subtotal = subtotal;
+                _unitOfWork.Repository<Order>().Update(order);
+            }
+            else
+            {
+                // create order
+                order = new Order(items, buyerEmail, shippingAddress, deliveryMethod, subtotal, basket.PaymentIntentId);
+                _unitOfWork.Repository<Order>().Add(order);
+            }
 
             // save to db 
-            _unitOfWork.Repository<Order>().Add(order);
             var result = await _unitOfWork.Complete();
 
             // Meaning there have been 0 changes, so something went wrong, we'll let our order controller deal with the error response
-            // This will usually be 2 as apart from the Order, an OrderItem will also be added
+            // result will usually be 2 as apart from the Order, an OrderItem will also be added
             if (result <= 0)
             {
                 return null;
             }
 
-            // delete basket
-            await _basketRepo.DeleteBasketAsync(basketId);
-
+            // Note that the basket will only be deleted once the payment is successful
             // return the order
             return order;
         }

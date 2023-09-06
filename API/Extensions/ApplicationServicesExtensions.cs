@@ -23,6 +23,7 @@ namespace API.Extensions
                 return ConnectionMultiplexer.Connect(options);
             });
             services.AddScoped<IBasketRepository, BasketRepository>();
+            services.AddScoped<IPaymentService, PaymentService>();
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IProductRepository, ProductRepository>(); // AddScoped means its lifetime is the scope of the HTTP request

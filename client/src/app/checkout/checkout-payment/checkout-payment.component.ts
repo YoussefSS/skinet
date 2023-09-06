@@ -76,9 +76,23 @@ export class CheckoutPaymentComponent implements OnInit {
     this.checkoutService.createOrder(orderToCreate).subscribe({
       next: (order) => {
         this.toastr.success('Order created successfully');
-        this.basketService.deleteLocalBasket();
-        const navigationExtras: NavigationExtras = { state: order };
-        this.router.navigate(['checkout/success'], navigationExtras);
+
+        // Confirming the payment intent
+        this.stripe?.confirmCardPayment(basket.clientSecret!, {
+          payment_method: {
+            card: this.cardNumber!,
+            billing_details: {
+              name: this.checkoutForm?.get('paymentForm')?.get('nameOnCard')?.value
+            }
+          }
+        }).then(result => {
+          console.log(result);
+          if(result.paymentIntent) {
+            this.basketService.deleteLocalBasket();
+            const navigationExtras: NavigationExtras = { state: order };
+            this.router.navigate(['checkout/success'], navigationExtras);
+          }
+        })
       },
     });
   }

@@ -46,24 +46,25 @@ export class CheckoutPaymentComponent implements OnInit {
       if (elements) {
         this.cardNumber = elements.create('cardNumber');
         this.cardNumber.mount(this.cardNumberElement?.nativeElement);
-        this.cardNumber.on('change', event => { // is triggered when the element value changes
+        this.cardNumber.on('change', (event) => {
+          // is triggered when the element value changes
           if (event.error) this.cardErrors = event.error.message;
           else this.cardErrors = null;
-        }) 
+        });
 
         this.cardExpiry = elements.create('cardExpiry');
         this.cardExpiry.mount(this.cardExpiryElement?.nativeElement);
-        this.cardExpiry.on('change', event => {
+        this.cardExpiry.on('change', (event) => {
           if (event.error) this.cardErrors = event.error.message;
           else this.cardErrors = null;
-        }) 
+        });
 
         this.cardCvc = elements.create('cardCvc');
         this.cardCvc.mount(this.cardCvcElement?.nativeElement);
-        this.cardCvc.on('change', event => { 
+        this.cardCvc.on('change', (event) => {
           if (event.error) this.cardErrors = event.error.message;
           else this.cardErrors = null;
-        }) 
+        });
       }
     });
   }
@@ -78,21 +79,26 @@ export class CheckoutPaymentComponent implements OnInit {
         this.toastr.success('Order created successfully');
 
         // Confirming the payment intent
-        this.stripe?.confirmCardPayment(basket.clientSecret!, {
-          payment_method: {
-            card: this.cardNumber!,
-            billing_details: {
-              name: this.checkoutForm?.get('paymentForm')?.get('nameOnCard')?.value
+        this.stripe
+          ?.confirmCardPayment(basket.clientSecret!, {
+            payment_method: {
+              card: this.cardNumber!,
+              billing_details: {
+                name: this.checkoutForm?.get('paymentForm')?.get('nameOnCard')
+                  ?.value,
+              },
+            },
+          })
+          .then((result) => {
+            console.log(result);
+            if (result.paymentIntent) {
+              this.basketService.deleteLocalBasket();
+              const navigationExtras: NavigationExtras = { state: order };
+              this.router.navigate(['checkout/success'], navigationExtras);
+            } else {
+              this.toastr.error(result.error.message);
             }
-          }
-        }).then(result => {
-          console.log(result);
-          if(result.paymentIntent) {
-            this.basketService.deleteLocalBasket();
-            const navigationExtras: NavigationExtras = { state: order };
-            this.router.navigate(['checkout/success'], navigationExtras);
-          }
-        })
+          });
       },
     });
   }

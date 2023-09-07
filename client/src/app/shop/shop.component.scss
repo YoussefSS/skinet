@@ -9,6 +9,8 @@
     }
 
     &:not(.active):hover {
+        transition: background-color 0.3s ease,
+                    color 0.3s ease;
         color: #fff;
         background-color: rgba(233, 84, 32, 0.5);
         border-radius: 10px;

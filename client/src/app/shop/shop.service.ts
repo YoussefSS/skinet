@@ -5,7 +5,7 @@ import { Product } from '../shared/models/product';
 import { Brand } from '../shared/models/brand';
 import { Type } from '../shared/models/type';
 import { ShopParams } from '../shared/models/shopParams';
-import { map, of } from 'rxjs';
+import { Observable, map, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -17,11 +17,25 @@ export class ShopService {
   types: Type[] = [];
   pagination?: Pagination<Product[]>;
   shopParams = new ShopParams();
+  productCache = new Map<string, Pagination<Product[]>>();
 
   constructor(private http: HttpClient) {}
 
   // returns observable
-  getProducts() {
+  getProducts(useCache = true): Observable<Pagination<Product[]>> {
+    if (!useCache) this.productCache = new Map();
+
+    if (this.productCache.size > 0 && useCache) {
+      if (this.productCache.has(Object.values(this.shopParams).join('-'))) {
+        this.pagination = this.productCache.get(
+          Object.values(this.shopParams).join('-')
+        );
+        if (this.pagination) {
+          return of(this.pagination);
+        }
+      }
+    }
+
     let params = new HttpParams();
 
     if (this.shopParams.brandId > 0)
@@ -42,7 +56,10 @@ export class ShopService {
       })
       .pipe(
         map((response) => {
-          this.products = [...this.products, ...response.data];
+          this.productCache.set(
+            Object.values(this.shopParams).join('-'),
+            response
+          );
           this.pagination = response;
           return response;
         })
@@ -58,9 +75,13 @@ export class ShopService {
   }
 
   getProduct(id: number) {
-    const product = this.products.find((p) => p.id === id);
+    const product = [...this.productCache.values()]
+      .reduce((acc, paginatedResult) => {
+        return {...acc, ...paginatedResult.data.find(x => x.id === id)}
+      }, {} as Product); // initial value is empty object
 
-    if (product) return of(product); // of makes it an Observable<Product>
+    // checking if the object is empty or not
+    if (Object.keys(product).length !== 0) return of(product); // of makes it an Observable<Product>
 
     return this.http.get<Product>(this.baseUrl + 'products/' + id);
   }

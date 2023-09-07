@@ -10,7 +10,7 @@ namespace API.Controllers
 {
     public class PaymentsController : BaseApiController
     {
-        private const string WhSecret = ""; // Webhook secret
+        private const string WhSecret = "whsec_b5a240f6f2248b24c0e0c7c123ced5d8b37a71c12f55a4a4248f5bf0768dccc8"; // Webhook secret
         private readonly IPaymentService _paymentService;
         private readonly ILogger<PaymentsController> _logger;
         public PaymentsController(IPaymentService paymentService, ILogger<PaymentsController> logger)
@@ -31,7 +31,7 @@ namespace API.Controllers
             return basket;
         }
 
-        [HttpPost]
+        [HttpPost("webhook")]
         public async Task<ActionResult> StripeWebhook()
         {
             // Stripe will send the event details in the request body

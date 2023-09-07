@@ -3,8 +3,10 @@ using API.Middleware;
 using Core.Entities.Identity;
 using Infrastructure.Data;
 using Infrastructure.Identity;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,7 +26,14 @@ app.UseStatusCodePagesWithReExecute("/errors/{0}");
 
 app.UseSwaggerDocumentation();
 
+// wwwroot by default - needed for our Angular build
 app.UseStaticFiles();
+// Content folder for our images
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Content")),
+    RequestPath = "/Content"
+});
 
 app.UseCors("CorsPolicy");
 
@@ -32,6 +41,9 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+// Telling our API what to do with routes that it does not know about
+// Action is Index, Fallback is a controller
+app.MapFallbackToController("Index", "Fallback");
 
 // START SNIPPET
 // This code snippet is going to create migrations for us at application startup

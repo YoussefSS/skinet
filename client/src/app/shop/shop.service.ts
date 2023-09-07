@@ -6,12 +6,13 @@ import { Brand } from '../shared/models/brand';
 import { Type } from '../shared/models/type';
 import { ShopParams } from '../shared/models/shopParams';
 import { Observable, map, of } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ShopService {
-  baseUrl = 'https://localhost:5001/api/';
+  baseUrl = environment.apiUrl;
   products: Product[] = [];
   brands: Brand[] = [];
   types: Type[] = [];
@@ -75,10 +76,12 @@ export class ShopService {
   }
 
   getProduct(id: number) {
-    const product = [...this.productCache.values()]
-      .reduce((acc, paginatedResult) => {
-        return {...acc, ...paginatedResult.data.find(x => x.id === id)}
-      }, {} as Product); // initial value is empty object
+    const product = [...this.productCache.values()].reduce(
+      (acc, paginatedResult) => {
+        return { ...acc, ...paginatedResult.data.find((x) => x.id === id) };
+      },
+      {} as Product
+    ); // initial value is empty object
 
     // checking if the object is empty or not
     if (Object.keys(product).length !== 0) return of(product); // of makes it an Observable<Product>

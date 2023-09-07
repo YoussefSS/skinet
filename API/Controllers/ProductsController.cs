@@ -34,6 +34,7 @@ namespace API.Controllers
             _mapper = mapper;
         }
 
+        [Cached(600)]
         [HttpGet]
         public async Task<ActionResult<Pagination<ProductToReturnDto>>> GetProducts([FromQuery] ProductSpecParams productParams)
         {
@@ -51,6 +52,7 @@ namespace API.Controllers
         /* We will pass in id as a parameter
         * Note that if you try to pass in a string you'll get an error, this is the [ApiController] attribute doing validation work
         */
+        [Cached(600)]
         [HttpGet("{id}")] // route will be /api/products/IDHERE
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
@@ -64,12 +66,14 @@ namespace API.Controllers
             return _mapper.Map<Product, ProductToReturnDto>(product);
         }
 
+        [Cached(600)]
         [HttpGet("brands")]
         public async Task<ActionResult<IReadOnlyList<ProductBrand>>> GetProductBrands()
         {
             return Ok(await _productBrandRepo.ListAllAsync()); // asp.net does not allow us to directly return an IReadOnlyList, so we must wrap it in Ok
         }
 
+        [Cached(600)]
         [HttpGet("types")]
         public async Task<ActionResult<IReadOnlyList<ProductType>>> GetProductTypes()
         {

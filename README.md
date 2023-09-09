@@ -28,3 +28,6 @@ Stripe test card: 4242 4242 4242 4242
 
 Stripe test card with 3D Authentication: 4000 0027 6000 3184
 
+---
+
+![Screenshot](docs/skinet_screenshot.png)
